@@ -1,6 +1,9 @@
 package post;
 
+import files.UploadFileInfo;
 import member.Member;
+
+import java.util.List;
 
 public interface PostService {
 
