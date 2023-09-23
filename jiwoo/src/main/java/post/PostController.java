@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 
 import member.Member;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,6 +36,7 @@ public class PostController {
     private final PostService postService;
     private final FileService fileService;
     private final StoreFile storeFile;
+    private final PostRepository postRepository;
 
     @PostMapping("/create")
     public String createPost(@Valid ValidatePostRequestDto validatePostRequestDto, BindingResult bindingResult
@@ -74,5 +76,34 @@ public class PostController {
         postService.updatePost(post_pk, validatePostRequestDto, member);
         fileService.updateFile(post_pk, uploadFileInfos);
         return "success";
+    }
+
+    @GetMapping("/searchTitle")
+    public String searchPostByTitle(HttpServletRequest request, Model model) {
+        String titleKeyWord = request.getParameter("title");
+        List<Post> byTitleContaining = postRepository.findByTitleContaining(titleKeyWord);
+        model.addAttribute("result", byTitleContaining);
+        return "";
+    }
+    @GetMapping("/searchContent")
+    public String searchPostByContent(HttpServletRequest request, Model model) {
+        String contentKeyWord = request.getParameter("content");
+        List<Post> byContentContaining = postRepository.findByContentContaining(contentKeyWord);
+        model.addAttribute("result", byContentContaining);
+        return "";
+    }
+    @GetMapping("/searchTitleAndContent")
+    public String searchPostByTAndC(HttpServletRequest request, Model model) {
+        String titleAndContent = request.getParameter("titleAndContent");
+        List<Post> byTitleContainingOrContentContaining = postRepository.findByTitleContainingOrContentContaining(titleAndContent);
+        model.addAttribute("result", byTitleContainingOrContentContaining);
+        return "";
+    }
+    @GetMapping("/searchNickname")
+    public String searchPostByNickname(String keyword, HttpServletRequest request, Model model) {
+        String nickname = request.getParameter("nickname");
+        List<Post> byNickname = postRepository.findByNickname(nickname);
+        model.addAttribute("result", byNickname);
+        return "";
     }
 }
