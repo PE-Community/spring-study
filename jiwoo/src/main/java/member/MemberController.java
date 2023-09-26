@@ -1,32 +1,46 @@
 package member;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.SessionAttribute;
+import session.SessionConst;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.Optional;
 
 @Slf4j
 @RestController
 @RequestMapping("/member")
+@RequiredArgsConstructor
 public class MemberController {
 
     private final MemberService memberService;
-
     private final MemberRepository memberRepository;
 
-    public MemberController(MemberService memberService, MemberRepository memberRepository) {
-        this.memberService = memberService;
-        this.memberRepository = memberRepository;
+    @GetMapping("/")
+    public String home() {
+        return "hmoe"; // 메인 페이지로 이동
     }
+    @GetMapping("/")
+    public String homeByLogin(@SessionAttribute(name=SessionConst.LOGIN_MEMBER, required = false) Member loginMember, Model model) {
 
+        if(loginMember==null) {
+            return "home";
+        }
+        model.addAttribute("member", loginMember);
+        return "loginHome"; //로그인 된 메인 페이지로 이동
+    }
     @GetMapping("/join")
     public ResponseEntity<String> signUpForm(Model model) {
         model.addAttribute("signUpRequestDto", new SignUpRequestDto());
@@ -58,20 +72,6 @@ public class MemberController {
         Optional<Member> findMemberId = memberRepository.findByMemberId(memberId);
         if(findMemberId != null) {
             return "fail";
-        }
-        return "success";
-    }
-
-    @PostMapping("/login")
-    public String login(@Valid LoginRequestDto loginRequestDto,BindingResult bindingResult) {
-        if(bindingResult.hasErrors()) {
-            return "fail";
-        }
-        Member loginMember = memberService.login(loginRequestDto.getLoginId(), loginRequestDto.getLoginPw());
-
-        if(loginMember == null) {
-            return "아이디 또는 비밀번호를 잘못 입력하였습니다.";
-            
         }
         return "success";
     }

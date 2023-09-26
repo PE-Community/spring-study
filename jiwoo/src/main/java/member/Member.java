@@ -50,7 +50,7 @@ public class Member {
     private String email;
 
     @Temporal(TemporalType.TIMESTAMP)
-     private Date dormant_account_YMD;
+     private Date dormant_account_ymd;
 
 }
 
