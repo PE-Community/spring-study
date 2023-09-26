@@ -1,12 +1,7 @@
 package pe.pecommunity.global.config.jwt;
 
-import static pe.pecommunity.global.error.ErrorCode.TOKEN_INVALID_EXCEPTION;
-import static pe.pecommunity.global.error.ErrorCode.TOKEN_UNSUPPORTED_EXCEPTION;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
-import io.jsonwebtoken.UnsupportedJwtException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -20,7 +15,6 @@ import org.springframework.http.MediaType;
 import org.springframework.web.filter.OncePerRequestFilter;
 import pe.pecommunity.global.common.response.ApiResponse;
 import pe.pecommunity.global.common.response.ResponseStatus;
-import pe.pecommunity.global.error.ErrorCode;
 
 @Slf4j
 public class ExceptionHandlerFilter extends OncePerRequestFilter {

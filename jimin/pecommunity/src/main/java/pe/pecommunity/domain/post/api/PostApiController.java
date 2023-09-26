@@ -1,6 +1,7 @@
 package pe.pecommunity.domain.post.api;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.validation.Valid;
 import lombok.Getter;
@@ -20,6 +21,7 @@ import pe.pecommunity.domain.post.application.PostService;
 import pe.pecommunity.domain.post.domain.Post;
 import pe.pecommunity.domain.post.dto.PostDto;
 import pe.pecommunity.domain.post.dto.PostRequestDto;
+import pe.pecommunity.domain.post.dto.PostSearchRequestDto;
 import pe.pecommunity.global.common.response.ApiResponse;
 import pe.pecommunity.global.common.response.ResponseUtils;
 
@@ -63,12 +65,22 @@ public class PostApiController {
 
 
     /**
-     * 게시글 조회
+     * 게시글 단일 조회
      */
     @GetMapping("/{postId}")
     @ResponseStatus(HttpStatus.OK)
     public ApiResponse<?> getPost(@PathVariable Long postId) {
         PostDto post = postService.findOne(postId);
         return ResponseUtils.successAsJson("post", post, "게시글 조회 성공");
+    }
+
+    /**
+     * 게시글 검색
+     */
+    @GetMapping("/search")
+    @ResponseStatus(HttpStatus.OK)
+    public ApiResponse<?> search(@RequestBody(required = false)  PostSearchRequestDto requestDto) {
+        List<PostDto> postList = postService.search(requestDto);
+        return ResponseUtils.successAsJson("post_list", postList, "게시글 전체 조회 성공");
     }
 }

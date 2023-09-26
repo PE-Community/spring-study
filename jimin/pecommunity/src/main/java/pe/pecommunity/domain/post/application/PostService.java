@@ -6,18 +6,25 @@ import static pe.pecommunity.global.error.ErrorCode.NOT_AUTHORIZED;
 import static pe.pecommunity.global.error.ErrorCode.NOT_LOGIN;
 import static pe.pecommunity.global.error.ErrorCode.POST_NOT_EXIST;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestBody;
 import pe.pecommunity.domain.board.dao.BoardRepository;
 import pe.pecommunity.domain.board.domain.Board;
 import pe.pecommunity.domain.member.dao.MemberRepository;
 import pe.pecommunity.domain.member.domain.Member;
 import pe.pecommunity.domain.post.dao.PostRepository;
+import pe.pecommunity.domain.post.dao.PostSpecification;
 import pe.pecommunity.domain.post.domain.Post;
 import pe.pecommunity.domain.post.dto.PostDto;
 import pe.pecommunity.domain.post.dto.PostRequestDto;
+import pe.pecommunity.domain.post.dto.PostSearchRequestDto;
 import pe.pecommunity.global.error.exception.BaseException;
 import pe.pecommunity.global.util.SecurityUtil;
 
@@ -84,6 +91,25 @@ public class PostService {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new BaseException(POST_NOT_EXIST));
         return PostDto.of(post);
+    }
+
+    /**
+     * 게시글 검색
+     */
+    public List<PostDto> search(PostSearchRequestDto requestDto) {
+        if(requestDto == null) {
+            return postRepository.findAll().stream().map(p -> PostDto.of(p)).collect(Collectors.toList());
+        }
+
+        Map<String, String> searchKeys = new HashMap<>();
+
+        if (requestDto.getMemberId() != null) searchKeys.put("memberId", requestDto.getMemberId());
+        if (requestDto.getTitle() != null) searchKeys.put("title", requestDto.getTitle());
+        if (requestDto.getContent() != null) searchKeys.put("content", requestDto.getContent());
+
+        return postRepository.findAll(PostSpecification.searchPost(searchKeys))
+                .stream().map(p -> PostDto.of(p))
+                .collect(Collectors.toList());
     }
 
     public void checkAuthorizedMember(String memberId) {
