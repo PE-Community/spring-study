@@ -43,30 +43,30 @@ public class PostApiController {
     private final PostService postService;
     private final FileService fileService;
 
-
     /**
-     * 게시글 등록 -> postman 파일 에러 발생 why....?
+     * 게시글 등록
      */
     @PostMapping(value = "/create", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     @ResponseStatus(HttpStatus.CREATED)
     public ApiResponse<?> register(@RequestPart(value = "post") @Valid PostRequestDto post, @RequestPart(value = "files", required = false) List<MultipartFile> files) throws IOException {
-
         Long postId = postService.resister(post);
-        log.info("files: {}", files);
         if(files != null) {
             fileService.saveFiles(postId, files);
         }
-
         return ResponseUtils.success("게시글 등록 성공");
     }
 
     /**
      * 게시글 수정
      */
-    @PatchMapping("/{postId}/update")
+    @PatchMapping(value = "/{postId}/update", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     @ResponseStatus(HttpStatus.OK)
-    public ApiResponse<?> update(@PathVariable Long postId, @RequestBody @Valid PostRequestDto request) {
-        postService.update(postId, request);
+    public ApiResponse<?> update(@PathVariable Long postId, @RequestPart @Valid PostRequestDto post,
+                                 @RequestPart(required = false) List<MultipartFile> files) throws IOException {
+        postService.update(postId, post);
+        if(files != null) {
+            fileService.update(postId, files);
+        }
         return ResponseUtils.success("게시글 수정 성공");
     }
 
@@ -76,6 +76,7 @@ public class PostApiController {
     @DeleteMapping("/{postId}/delete")
     @ResponseStatus(HttpStatus.OK)
     public ApiResponse<?> delete(@PathVariable Long postId) {
+        fileService.delete(postId);
         postService.delete(postId);
         return ResponseUtils.success("게시글 삭제 성공");
     }

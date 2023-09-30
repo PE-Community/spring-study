@@ -17,6 +17,7 @@ import pe.pecommunity.domain.File.domain.UploadFile;
 import pe.pecommunity.domain.post.dao.PostRepository;
 import pe.pecommunity.domain.post.domain.Post;
 import pe.pecommunity.global.error.exception.BaseException;
+import pe.pecommunity.global.util.SecurityUtil;
 
 @Slf4j
 @Service
@@ -45,5 +46,23 @@ public class FileService {
         fileRepository.saveAll(fileList);
     }
 
+    @Transactional
+    public void delete(Long postId) {
+        Post post = postRepository.findById(postId).orElseThrow(() -> new BaseException(POST_NOT_EXIST));
+
+        SecurityUtil.checkAuthorizedMember(post.getMember().getMemberId());
+
+        if(post.getFiles() != null) {
+            for(File file : post.getFiles()) {
+                fileRepository.delete(file);
+            }
+        }
+    }
+
+    @Transactional
+    public void update(Long postId, List<MultipartFile> requestFiles) throws IOException {
+        delete(postId);
+        saveFiles(postId, requestFiles);
+    }
 
 }

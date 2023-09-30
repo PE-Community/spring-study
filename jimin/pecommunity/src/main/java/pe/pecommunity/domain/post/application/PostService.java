@@ -15,6 +15,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
+import pe.pecommunity.domain.File.dao.FileRepository;
+import pe.pecommunity.domain.File.domain.File;
 import pe.pecommunity.domain.board.dao.BoardRepository;
 import pe.pecommunity.domain.board.domain.Board;
 import pe.pecommunity.domain.member.dao.MemberRepository;
@@ -37,6 +39,7 @@ public class PostService {
     private final PostRepository postRepository;
     private final MemberRepository memberRepository;
     private final BoardRepository boardRepository;
+    private final FileRepository fileRepository;
 
     /**
      * 게시글 등록
@@ -68,7 +71,7 @@ public class PostService {
         Post findPost = postRepository.findById(postId)
                 .orElseThrow(() -> new BaseException(POST_NOT_EXIST));
 
-        checkAuthorizedMember(findPost.getMember().getMemberId());
+        SecurityUtil.checkAuthorizedMember(findPost.getMember().getMemberId());
 
         findPost.update(postRequest.getTitle(), postRequest.getContent());
         return findPost.getId();
@@ -79,7 +82,7 @@ public class PostService {
         Post findPost = postRepository.findById(postId)
                 .orElseThrow(() -> new BaseException(POST_NOT_EXIST));
 
-        checkAuthorizedMember(findPost.getMember().getMemberId());
+        SecurityUtil.checkAuthorizedMember(findPost.getMember().getMemberId());
 
         postRepository.deleteById(postId);
     }
@@ -110,10 +113,5 @@ public class PostService {
         return postRepository.findAll(PostSpecification.searchPost(searchKeys))
                 .stream().map(p -> PostDto.of(p))
                 .collect(Collectors.toList());
-    }
-
-    public void checkAuthorizedMember(String memberId) {
-        String loginId = SecurityUtil.getCurrentMemberId().orElseThrow(() -> new BaseException(NOT_LOGIN));
-        if(!memberId.equals(loginId)) throw new BaseException(NOT_AUTHORIZED);
     }
 }

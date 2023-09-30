@@ -26,6 +26,9 @@ public enum ErrorCode {
     //post
     POST_NOT_EXIST("존재하지 않는 게시글입니다."),
 
+    // File
+    FILE_NOT_EXIST("존재하지 않는 파일입니다."),
+
 
     // jwt token
     TOKEN_EXPIRED_EXCEPTION("만료된 JWT 토큰입니다."),
