@@ -16,7 +16,7 @@ public class PostDto {
     private Long id;
     private Long boardId;
     private String boardNm;
-    private Long memberId;
+    private String memberId;
     private String nickname;
     private String title;
     private String content;
@@ -29,7 +29,7 @@ public class PostDto {
                 .id(post.getId())
                 .boardId(post.getBoard().getId())
                 .boardNm(post.getBoard().getBoardNm())
-                .memberId(post.getMember().getId())
+                .memberId(post.getMember().getMemberId())
                 .nickname(post.getMember().getNickname())
                 .title(post.getTitle())
                 .content(post.getContent())
@@ -40,7 +40,7 @@ public class PostDto {
     }
 
     @Builder(builderMethodName = "createPostDtoBuilder")
-    public PostDto(Long id, Long boardId, String boardNm, Long memberId, String nickname, String title,
+    public PostDto(Long id, Long boardId, String boardNm, String memberId, String nickname, String title,
                    String content, Long viewCnt, LocalDateTime createDate, LocalDateTime updateDate) {
         this.id = id;
         this.boardId = boardId;

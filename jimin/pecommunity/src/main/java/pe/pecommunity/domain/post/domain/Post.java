@@ -3,6 +3,8 @@ package pe.pecommunity.domain.post.domain;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -10,11 +12,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import pe.pecommunity.domain.File.domain.File;
 import pe.pecommunity.domain.board.domain.Board;
 import pe.pecommunity.domain.member.domain.Member;
 
@@ -35,6 +39,9 @@ public class Post {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_pk")
     private Member member;
+
+    @OneToMany(mappedBy = "post")
+    private List<File> files = new ArrayList<>();
 
     @Column(nullable = false)
     private String title;

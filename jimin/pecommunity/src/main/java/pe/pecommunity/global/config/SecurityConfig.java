@@ -96,7 +96,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // api 경로
         .and()
             .authorizeRequests()
-                .antMatchers("/member/join", "/member/login").permitAll()
+                .antMatchers("/member/join", "/member/login", "/post/search").permitAll()
                 .anyRequest().authenticated() // 나머지 경로는 jwt 인증
 
         // JwtFilter 추가
