@@ -28,10 +28,17 @@ public class Post {
     private Board board;
 
     @Column(name = "member_fk")
-
     private String memberFk;
 
     private String title;
+
+    private String content;
+
+    private String author;
+
+    @Column
+    private Long fileId;
+
     // 데이터 베이스 저장 시점 현재시간으로 설정
     @CreationTimestamp
     private LocalDateTime createYmd;
@@ -39,10 +46,28 @@ public class Post {
     @UpdateTimestamp
     private LocalDateTime updateYmd;
 
-    private String content;
-
     @Column(name = "view_cnt")
     private int viewCnt;
+
+    @Builder
+    public Post(Long id, String author, String title, String content, Long fileId) {
+        this.postPk = id;
+        this.author = author;
+        this.title = title;
+        this.content = content;
+        this.fileId = fileId;
+    }
+
+    public Post toEntity() {
+        Post build = Post.builder()
+                .postPk(postPk)
+                .author(author)
+                .title(title)
+                .content(content)
+                .fileId(fileId)
+                .build();
+        return build;
+    }
 
 
 
