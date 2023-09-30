@@ -1,14 +1,14 @@
 package post;
 
+import files.FileRepository;
+import files.UploadFileInfo;
 import lombok.RequiredArgsConstructor;
 import member.Member;
 import member.MemberRepository;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Stream;
 
 @Service
@@ -27,6 +27,7 @@ public class PostServiceImp implements PostService {
                 .create_ymd(LocalDateTime.now())
                 .build();
         postRepository.save(createPost);
+
     }
 
     @Override
@@ -44,7 +45,12 @@ public class PostServiceImp implements PostService {
         List<Post> postList = postRepository.findPostByMemberPk(member.getMember_pk());
         Stream<Post> postStream = postList.stream().filter(m -> m.getPost_pk() == post_pk);
         if(postStream!=null) {
-            postRepository.save();
+            Post updatePost = Post.builder()
+                    .content(validatePostRequestDto.getContent())
+                    .title(validatePostRequestDto.getTitle())
+                    .update_ymd(LocalDateTime.now())
+                    .build();
+            postRepository.save(updatePost);
         }
     }
 }

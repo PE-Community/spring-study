@@ -53,9 +53,10 @@ public class Post {
     private int view_cnt;
 
     @Builder
-    public Post(String title, LocalDateTime create_ymd, String content) {
+    public Post(String title, LocalDateTime create_ymd, String content, LocalDateTime update_ymd) {
         this.title = title;
         this.content = content;
         this.create_ymd = create_ymd;
+        this.update_ymd = update_ymd;
     }
 }
