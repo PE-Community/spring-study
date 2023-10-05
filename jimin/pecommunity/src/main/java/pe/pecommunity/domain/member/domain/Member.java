@@ -15,6 +15,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import pe.pecommunity.domain.comment.domain.Comment;
 import pe.pecommunity.domain.post.domain.Post;
 
 @Entity
@@ -30,6 +31,9 @@ public class Member {
 //    @JsonIgnore
     @OneToMany(mappedBy = "member")
     private List<Post> posts = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member")
+    private List<Comment> comments = new ArrayList<>();
 
     @Column(unique = true, nullable = false)
     private String memberId;

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -20,6 +21,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import pe.pecommunity.domain.File.domain.File;
 import pe.pecommunity.domain.board.domain.Board;
+import pe.pecommunity.domain.comment.domain.Comment;
 import pe.pecommunity.domain.member.domain.Member;
 
 @Entity
@@ -42,6 +44,9 @@ public class Post {
 
     @OneToMany(mappedBy = "post")
     private List<File> files = new ArrayList<>();
+
+    @OneToMany(mappedBy = "post")
+    private List<Comment> comments = new ArrayList<>();
 
     @Column(nullable = false)
     private String title;
