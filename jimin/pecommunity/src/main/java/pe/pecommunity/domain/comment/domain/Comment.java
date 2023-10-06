@@ -46,7 +46,8 @@ public class Comment {
     private int step;
     private LocalDateTime createDate;
     private LocalDateTime updateDate;
-    private boolean isDeleted;
+    private Boolean isDeleted;
+    private Boolean isSecret;
 
     @Builder(builderMethodName = "createCommentBuilder")
     public Comment(String content, Member member, Post post) {
@@ -55,6 +56,7 @@ public class Comment {
         this.post = post;
         this.step = 0;
         this.isDeleted = false;
+        this.isSecret = false;
         this.createDate = LocalDateTime.now();
         this.updateDate = LocalDateTime.now();
 
@@ -66,6 +68,11 @@ public class Comment {
     public void addParent(Comment parent) {
         this.parent = parent;
         parent.getChildren().add(this);
+        this.step = parent.getStep() + 1;
+    }
+
+    public void changeSecret(Boolean isSecret) {
+        this.isSecret = isSecret;
     }
 
 }

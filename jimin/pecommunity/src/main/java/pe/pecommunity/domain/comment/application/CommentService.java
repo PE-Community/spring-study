@@ -1,5 +1,6 @@
 package pe.pecommunity.domain.comment.application;
 
+import static pe.pecommunity.global.error.ErrorCode.COMMENT_LEVEL_EXCEED;
 import static pe.pecommunity.global.error.ErrorCode.COMMENT_NOT_EXIST;
 import static pe.pecommunity.global.error.ErrorCode.COMMENT_NOT_SAME_POST;
 import static pe.pecommunity.global.error.ErrorCode.MEMBER_NOT_EXIST;
@@ -27,6 +28,7 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final PostRepository postRepository;
     private final MemberRepository memberRepository;
+    private static final int MAX_COMMENT_LEVEL = 2;
 
     @Transactional
     public Long save(Long postId, CommentRequestDto requestDto) {
@@ -42,9 +44,17 @@ public class CommentService {
                 .post(findPost)
                 .build();
 
+        if(requestDto.getIsSecret() != null) {
+            comment.changeSecret(requestDto.getIsSecret());
+        }
+
         if(requestDto.getParentId() != null) { // 대댓글인 경우
             Comment parent = getParent(postId, requestDto.getParentId());
             comment.addParent(parent);
+        }
+
+        if(comment.getStep() > MAX_COMMENT_LEVEL) { // 댓글 레벨 제한
+            throw new BaseException(COMMENT_LEVEL_EXCEED);
         }
 
         commentRepository.save(comment);

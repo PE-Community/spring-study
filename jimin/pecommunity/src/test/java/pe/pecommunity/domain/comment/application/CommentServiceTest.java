@@ -1,10 +1,8 @@
 package pe.pecommunity.domain.comment.application;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.jupiter.api.Assertions.*;
 
 import javax.persistence.EntityManager;
-import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +16,6 @@ import pe.pecommunity.domain.comment.dto.CommentRequestDto;
 import pe.pecommunity.domain.member.domain.Member;
 import pe.pecommunity.domain.post.domain.Post;
 
-@Slf4j
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @Transactional
@@ -35,11 +32,9 @@ public class CommentServiceTest {
         Member member = createMember();
         Post post = createPost(member);
 
-        String content = "댓글 내용입니다.";
-
         //when
         CommentRequestDto commentRequestDto = CommentRequestDto.builder()
-                .content(content)
+                .content("댓글 내용입니다.")
                 .memberId(member.getId())
                 .build();
 
@@ -56,13 +51,11 @@ public class CommentServiceTest {
         //given
         Member member = createMember();
         Post post = createPost(member);
-        Comment parent = createParentComment(member, post);
-
-        String content = "두 번째 댓글";
+        Comment parent = createComment(member, post, "첫 번째 댓글");
 
         //when
         CommentRequestDto commentRequestDto = CommentRequestDto.builder()
-                .content(content)
+                .content("두 번째 댓글")
                 .memberId(member.getId())
                 .parentId(parent.getId())
                 .build();
@@ -72,16 +65,18 @@ public class CommentServiceTest {
         Comment child = commentRepository.findById(commentId).orElseThrow();
         assertEquals("부모 댓글 내용", parent.getContent(), child.getParent().getContent());
         assertEquals("자식 댓글 내용", "두 번째 댓글", parent.getChildren().get(0).getContent());
+        assertEquals("부모 댓글 level", 0, parent.getStep());
+        assertEquals("자식 댓글 level", 1, child.getStep());
     }
 
-    private Comment createParentComment(Member member, Post post) {
-        Comment parent = Comment.createCommentBuilder()
-                .content("첫 댓글")
+    private Comment createComment(Member member, Post post, String content) {
+        Comment comment = Comment.createCommentBuilder()
+                .content(content)
                 .member(member)
                 .post(post)
                 .build();
-        em.persist(parent);
-        return parent;
+        em.persist(comment);
+        return comment;
     }
 
     private Post createPost(Member member) {

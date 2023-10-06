@@ -21,10 +21,13 @@ public class CommentRequestDto {
 
     private Long parentId;
 
+    private Boolean isSecret;
+
     @Builder
-    public CommentRequestDto(String content, Long memberId, Long parentId) {
+    public CommentRequestDto(String content, Long memberId, Long parentId, Boolean isSecret) {
         this.content = content;
         this.memberId = memberId;
         this.parentId = parentId;
+        this.isSecret = isSecret;
     }
 }

@@ -27,6 +27,7 @@ public enum ErrorCode {
     POST_NOT_EXIST("존재하지 않는 게시글입니다."),
     COMMENT_NOT_EXIST("존재하지 않는 댓글입니다."),
     COMMENT_NOT_SAME_POST("부모 댓글과 자식 댓글의 게시글이 일치하지 않습니다."),
+    COMMENT_LEVEL_EXCEED("댓글은 2레벨까지만 작성가능합니다."),
 
     // File
     FILE_NOT_EXIST("존재하지 않는 파일입니다."),
