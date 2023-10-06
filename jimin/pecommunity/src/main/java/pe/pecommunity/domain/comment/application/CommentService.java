@@ -18,6 +18,7 @@ import pe.pecommunity.domain.member.domain.Member;
 import pe.pecommunity.domain.post.dao.PostRepository;
 import pe.pecommunity.domain.post.domain.Post;
 import pe.pecommunity.global.error.exception.BaseException;
+import pe.pecommunity.global.util.SecurityUtil;
 
 @Slf4j
 @Service
@@ -58,6 +59,23 @@ public class CommentService {
         }
 
         commentRepository.save(comment);
+        return comment.getId();
+    }
+
+    @Transactional
+    public Long update(Long commentId, CommentRequestDto requestDto) {
+
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new BaseException(COMMENT_NOT_EXIST));
+
+        SecurityUtil.checkAuthorizedMember(comment.getMember().getMemberId());
+
+        comment.update(requestDto.getContent());
+
+        if(requestDto.getIsSecret() != null) {
+            comment.changeSecret(requestDto.getIsSecret());
+        }
+
         return comment.getId();
     }
 

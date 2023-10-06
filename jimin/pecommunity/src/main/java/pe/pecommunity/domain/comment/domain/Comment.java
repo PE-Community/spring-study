@@ -75,4 +75,9 @@ public class Comment {
         this.isSecret = isSecret;
     }
 
+    public void update(String content) {
+        this.content = content;
+        this.updateDate = LocalDateTime.now();
+    }
+
 }
