@@ -65,8 +65,8 @@ public class CommentServiceTest {
         Comment child = commentRepository.findById(commentId).orElseThrow();
         assertEquals("부모 댓글 내용", parent.getContent(), child.getParent().getContent());
         assertEquals("자식 댓글 내용", "두 번째 댓글", parent.getChildren().get(0).getContent());
-        assertEquals("부모 댓글 level", 0, parent.getStep());
-        assertEquals("자식 댓글 level", 1, child.getStep());
+        assertEquals("부모 댓글 level", 0, parent.getLevel());
+        assertEquals("자식 댓글 level", 1, child.getLevel());
     }
 
     private Comment createComment(Member member, Post post, String content) {

@@ -1,10 +1,7 @@
 package pe.pecommunity.domain.comment.domain;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -17,6 +14,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import pe.pecommunity.domain.BaseTimeEntity;
 import pe.pecommunity.domain.member.domain.Member;
 import pe.pecommunity.domain.post.domain.Post;
 
@@ -24,7 +22,7 @@ import pe.pecommunity.domain.post.domain.Post;
 @Table
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Comment {
+public class Comment extends BaseTimeEntity {
 
     @Id @GeneratedValue
     private Long id;
@@ -46,8 +44,7 @@ public class Comment {
 
     private String content;
     private int level;
-    private LocalDateTime createDate;
-    private LocalDateTime updateDate;
+
     private Boolean isRemoved;
     private Boolean isSecret;
 
@@ -59,8 +56,6 @@ public class Comment {
         this.level = 0;
         this.isRemoved = false;
         this.isSecret = false;
-        this.createDate = LocalDateTime.now();
-        this.updateDate = LocalDateTime.now();
 
         //==연관관계 편의 메서드==//
         post.getComments().add(this);
@@ -84,7 +79,6 @@ public class Comment {
 
     public void update(String content) {
         this.content = content;
-        this.updateDate = LocalDateTime.now();
     }
 
 
