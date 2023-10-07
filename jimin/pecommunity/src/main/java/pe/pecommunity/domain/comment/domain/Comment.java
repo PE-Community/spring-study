@@ -41,7 +41,7 @@ public class Comment {
     @ManyToOne(fetch = FetchType.LAZY)
     private Comment parent;
 
-    @OneToMany(mappedBy = "parent", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "parent", orphanRemoval = true)
     private List<Comment> children = new ArrayList<>();
 
     private String content;

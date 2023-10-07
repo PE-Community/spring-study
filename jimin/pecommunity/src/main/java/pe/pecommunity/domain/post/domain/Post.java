@@ -44,7 +44,7 @@ public class Post {
     @OneToMany(mappedBy = "post")
     private List<File> files = new ArrayList<>();
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post", orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 
     @Column(nullable = false)
