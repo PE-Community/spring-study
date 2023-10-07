@@ -3,6 +3,8 @@ package pe.pecommunity.domain.comment.domain;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -35,18 +37,18 @@ public class Comment {
     @ManyToOne(fetch = FetchType.LAZY)
     private Post post;
 
-    @JoinColumn(name = "parent_id")
+    @JoinColumn(name = "parent_pk")
     @ManyToOne(fetch = FetchType.LAZY)
     private Comment parent;
 
-    @OneToMany(mappedBy = "parent")
+    @OneToMany(mappedBy = "parent", cascade = CascadeType.REMOVE)
     private List<Comment> children = new ArrayList<>();
 
     private String content;
-    private int step;
+    private int level;
     private LocalDateTime createDate;
     private LocalDateTime updateDate;
-    private Boolean isDeleted;
+    private Boolean isRemoved;
     private Boolean isSecret;
 
     @Builder(builderMethodName = "createCommentBuilder")
@@ -54,8 +56,8 @@ public class Comment {
         this.content = content;
         this.member = member;
         this.post = post;
-        this.step = 0;
-        this.isDeleted = false;
+        this.level = 0;
+        this.isRemoved = false;
         this.isSecret = false;
         this.createDate = LocalDateTime.now();
         this.updateDate = LocalDateTime.now();
@@ -68,10 +70,15 @@ public class Comment {
     public void addParent(Comment parent) {
         this.parent = parent;
         parent.getChildren().add(this);
-        this.step = parent.getStep() + 1;
+        this.level = parent.getLevel() + 1;
+
     }
 
-    public void changeSecret(Boolean isSecret) {
+    public void changeIsRemoved(boolean isRemoved) {
+        this.isRemoved = isRemoved;
+    }
+
+    public void changeSecret(boolean isSecret) {
         this.isSecret = isSecret;
     }
 
@@ -79,5 +86,6 @@ public class Comment {
         this.content = content;
         this.updateDate = LocalDateTime.now();
     }
+
 
 }

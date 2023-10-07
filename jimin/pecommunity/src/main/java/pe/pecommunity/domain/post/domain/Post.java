@@ -31,7 +31,6 @@ import pe.pecommunity.domain.member.domain.Member;
 public class Post {
 
     @Id @GeneratedValue
-    @Column(name = "post_pk")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)

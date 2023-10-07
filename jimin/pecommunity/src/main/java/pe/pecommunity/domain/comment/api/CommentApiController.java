@@ -4,6 +4,7 @@ import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -36,6 +37,13 @@ public class CommentApiController {
     public ApiResponse<?> update(@PathVariable Long commentId, @Valid @RequestBody CommentRequestDto requestDto) {
         commentService.update(commentId, requestDto);
         return ResponseUtils.success("댓글 수정 성공");
+    }
+
+    @DeleteMapping("/{commentId}")
+    @ResponseStatus(HttpStatus.OK)
+    public ApiResponse<?> delete(@PathVariable Long commentId) {
+        commentService.delete(commentId);
+        return ResponseUtils.success("댓글 삭제 성공");
     }
 
 }
