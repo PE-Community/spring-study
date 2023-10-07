@@ -3,14 +3,14 @@ package pe.pecommunity.domain.comment.application;
 import static pe.pecommunity.global.error.ErrorCode.COMMENT_LEVEL_EXCEED;
 import static pe.pecommunity.global.error.ErrorCode.COMMENT_NOT_EXIST;
 import static pe.pecommunity.global.error.ErrorCode.COMMENT_NOT_SAME_POST;
-import static pe.pecommunity.global.error.ErrorCode.COMMENT_REMOVE_FAIL;
 import static pe.pecommunity.global.error.ErrorCode.MEMBER_NOT_EXIST;
 import static pe.pecommunity.global.error.ErrorCode.PARENT_COMMENT_NOT_EXIST;
 import static pe.pecommunity.global.error.ErrorCode.POST_NOT_EXIST;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -36,6 +36,8 @@ public class CommentService {
     private final PostRepository postRepository;
     private final MemberRepository memberRepository;
     private static final int MAX_COMMENT_LEVEL = 2;
+    private static final String REMOVED_COMMENT = "삭제된 댓글입니다.";
+    private static final String SECRET_COMMENT = "비밀 댓글입니다.";
 
     @Transactional
     public Long save(Long postId, CommentRequestDto requestDto) {
@@ -108,9 +110,34 @@ public class CommentService {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new BaseException(POST_NOT_EXIST));
 
-        return commentRepository.findAllByPostId(post.getId())
-                .stream().map(c -> CommentDto.of(c))
-                .collect(Collectors.toList());
+        List<Comment> commentList = commentRepository.findAllByPostId(post.getId());
+
+        List<CommentDto> responseList = new ArrayList<>();
+
+        Map<Long, CommentDto> parent = new HashMap<>();
+        for (Comment comment : commentList) {
+            CommentDto cDto = CommentDto.of(comment, checkRemovedOrSecret(comment));
+            parent.put(comment.getId(), cDto);
+
+            if(comment.getParent() == null) responseList.add(cDto);
+            else {
+                parent.get(comment.getParent().getId())
+                        .getChildren()
+                        .add(cDto);
+            }
+        }
+
+        return responseList;
+    }
+
+    private String checkRemovedOrSecret(Comment comment) {
+        if(comment.getIsRemoved()) return REMOVED_COMMENT;
+
+        String loinId = SecurityUtil.getCurrentMemberId().get();
+        String writerId = comment.getMember().getMemberId();
+        if(comment.getIsSecret() && !writerId.equals(loinId)) return SECRET_COMMENT;
+
+        return comment.getContent();
     }
 
     private void deleteRootComment(Comment comment) {

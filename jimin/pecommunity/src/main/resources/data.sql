@@ -14,10 +14,10 @@ INSERT INTO Post (id, board_pk, member_pk, title, content, view_cnt, create_date
 
 
 INSERT INTO Comment (id, member_pk, post_pk, parent_pk, content, level, create_date, update_date, is_removed, is_secret) VALUES (100, 100, 100, null, "100, LEVEL 0 - 1, null", 0, "2023-10-01 10:10:10", "2023-10-01 10:10:10", 0, 0);
-INSERT INTO Comment (id, member_pk, post_pk, parent_pk, content, level, create_date, update_date, is_removed, is_secret) VALUES (101, 100, 100, 100, "101, LEVEL 1 - 1, 100", 1, "2023-10-01 11:10:10", "2023-10-01 11:10:10", 1, 0);
+INSERT INTO Comment (id, member_pk, post_pk, parent_pk, content, level, create_date, update_date, is_removed, is_secret) VALUES (101, 101, 100, 100, "101, LEVEL 1 - 1, 100", 1, "2023-10-01 11:10:10", "2023-10-01 11:10:10", 0, 1);
 INSERT INTO Comment (id, member_pk, post_pk, parent_pk, content, level, create_date, update_date, is_removed, is_secret) VALUES (102, 100, 100, 100, "102, LEVEL 1 - 2, 100", 1, "2023-10-01 12:20:10", "2023-10-01 12:20:10", 1, 0);
-INSERT INTO Comment (id, member_pk, post_pk, parent_pk, content, level, create_date, update_date, is_removed, is_secret) VALUES (103, 100, 100, 101, "103, LEVEL 2 - 1, 101", 2, "2023-10-01 13:25:10", "2023-10-01 13:25:10", 1, 0);
-INSERT INTO Comment (id, member_pk, post_pk, parent_pk, content, level, create_date, update_date, is_removed, is_secret) VALUES (104, 100, 100, 102, "104, LEVEL 2 - 1, 102", 2, "2023-10-01 13:18:10", "2023-10-01 13:18:10", 1, 0);
+INSERT INTO Comment (id, member_pk, post_pk, parent_pk, content, level, create_date, update_date, is_removed, is_secret) VALUES (103, 100, 100, 101, "103, LEVEL 2 - 1, 101", 2, "2023-10-01 13:25:10", "2023-10-01 13:25:10", 0, 1);
+INSERT INTO Comment (id, member_pk, post_pk, parent_pk, content, level, create_date, update_date, is_removed, is_secret) VALUES (104, 100, 100, 102, "104, LEVEL 2 - 1, 102", 2, "2023-10-01 13:18:10", "2023-10-01 13:18:10", 0, 1);
 INSERT INTO Comment (id, member_pk, post_pk, parent_pk, content, level, create_date, update_date, is_removed, is_secret) VALUES (105, 100, 100, 102, "105, LEVEL 2 - 2, 102", 2, "2023-10-01 13:21:10", "2023-10-01 13:21:10", 1, 0);
-INSERT INTO Comment (id, member_pk, post_pk, parent_pk, content, level, create_date, update_date, is_removed, is_secret) VALUES (106, 100, 100, null, "106, LEVEL 0 - 2, null", 0, "2023-10-01 10:20:10", "2023-10-01 10:20:10", 0, 0);
+INSERT INTO Comment (id, member_pk, post_pk, parent_pk, content, level, create_date, update_date, is_removed, is_secret) VALUES (106, 101, 100, null, "106, LEVEL 0 - 2, null", 0, "2023-10-01 10:20:10", "2023-10-01 10:20:10", 0, 0);
 

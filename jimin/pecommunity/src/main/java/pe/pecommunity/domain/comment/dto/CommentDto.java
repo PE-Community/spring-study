@@ -3,6 +3,8 @@ package pe.pecommunity.domain.comment.dto;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,21 +24,7 @@ public class CommentDto {
     private LocalDateTime updateDate;
     private Boolean isRemoved;
     private Boolean isSecret;
-
-    public static CommentDto of(Comment comment) {
-        Long parentId = (comment.getParent() == null) ? null : comment.getParent().getId();
-        return CommentDto.createCommentDtoBuilder()
-                .id(comment.getId())
-                .parentId(parentId)
-                .memberId(comment.getMember().getMemberId())
-                .content(comment.getContent())
-                .level(comment.getLevel())
-                .createDate(comment.getCreateDate())
-                .updateDate(comment.getUpdateDate())
-                .isRemoved(comment.getIsRemoved())
-                .isSecret(comment.getIsSecret())
-                .build();
-    }
+    private List<CommentDto> children;
 
     @Builder(builderMethodName = "createCommentDtoBuilder")
     public CommentDto(Long id, Long parentId, String memberId, String content, int level,
@@ -50,20 +38,21 @@ public class CommentDto {
         this.updateDate = updateDate;
         this.isRemoved = isRemoved;
         this.isSecret = isSecret;
+        this.children = new ArrayList<>();
     }
 
-    @Override
-    public String toString() {
-        return "CommentDto {" +
-                "id=" + id +
-                ", parentId=" + parentId +
-                ", memberId='" + memberId + '\'' +
-                ", content='" + content + '\'' +
-                ", level=" + level +
-                ", createDate=" + createDate +
-                ", updateDate=" + updateDate +
-                ", isRemoved=" + isRemoved +
-                ", isSecret=" + isSecret +
-                '}';
+    public static CommentDto of(Comment comment, String content) {
+        Long parentId = (comment.getParent() == null) ? -1 : comment.getParent().getId();
+        return CommentDto.createCommentDtoBuilder()
+                .id(comment.getId())
+                .parentId(parentId)
+                .memberId(comment.getMember().getMemberId())
+                .content(content)
+                .level(comment.getLevel())
+                .createDate(comment.getCreateDate())
+                .updateDate(comment.getUpdateDate())
+                .isRemoved(comment.getIsRemoved())
+                .isSecret(comment.getIsSecret())
+                .build();
     }
 }
