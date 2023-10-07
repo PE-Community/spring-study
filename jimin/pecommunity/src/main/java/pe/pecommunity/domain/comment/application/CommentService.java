@@ -10,12 +10,14 @@ import static pe.pecommunity.global.error.ErrorCode.POST_NOT_EXIST;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pe.pecommunity.domain.comment.dao.CommentRepository;
 import pe.pecommunity.domain.comment.domain.Comment;
+import pe.pecommunity.domain.comment.dto.CommentDto;
 import pe.pecommunity.domain.comment.dto.CommentRequestDto;
 import pe.pecommunity.domain.member.dao.MemberRepository;
 import pe.pecommunity.domain.member.domain.Member;
@@ -99,6 +101,18 @@ public class CommentService {
         deleteRootComment(comment); // 최상위 댓글 delete or not
     }
 
+    /**
+     * 게시글 댓글 전체 조회
+     */
+    public List<CommentDto> findAll(Long postId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new BaseException(POST_NOT_EXIST));
+
+        return commentRepository.findAllByPostId(post.getId())
+                .stream().map(c -> CommentDto.of(c))
+                .collect(Collectors.toList());
+    }
+
     private void deleteRootComment(Comment comment) {
         Comment root = findRootComment(comment);
         if(!root.getIsRemoved()) return;
@@ -126,7 +140,6 @@ public class CommentService {
 
         return cnt;
     }
-
 
     private Comment getParent(Long postId, Long parentId) {
         Comment parent = commentRepository.findById(parentId)

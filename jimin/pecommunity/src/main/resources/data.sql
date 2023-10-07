@@ -8,9 +8,9 @@ VALUES (100, "test1", "testname1", "$2a$10$Je7.2OQpF.Mb2deXZ5.6uOTZA5BgBOk6sLame
 INSERT INTO Member (member_pk, member_id, nickname, password, email, role, dormant_conversion_date)
 VALUES (101, "test2", "testname2", "$2a$10$Je7.2OQpF.Mb2deXZ5.6uOTZA5BgBOk6sLamep5S20EfcJRHxCiqa", "test12@email2", "MEMBER", null);
 
-INSERT INTO Post (id, board_pk, member_pk, title, content, view_cnt, create_date, update_date) VALUES (100, 1, 100, "post 1", "post111", 0, null, null);
-INSERT INTO Post (id, board_pk, member_pk, title, content, view_cnt, create_date, update_date) VALUES (101, 1, 101, "post 2", "post222", 0, null, null);
-INSERT INTO Post (id, board_pk, member_pk, title, content, view_cnt, create_date, update_date) VALUES (102, 1, 100, "post 2", "post333", 0, null, null);
+INSERT INTO Post (id, board_pk, member_pk, title, content, view_cnt, create_date, update_date) VALUES (100, 1, 100, "post 1", "post111", 0, "2023-01-01 01:01:01", "2023-01-01 01:01:01");
+INSERT INTO Post (id, board_pk, member_pk, title, content, view_cnt, create_date, update_date) VALUES (101, 1, 101, "post 2", "post222", 0, "2023-01-01 01:01:01", "2023-01-01 01:01:01");
+INSERT INTO Post (id, board_pk, member_pk, title, content, view_cnt, create_date, update_date) VALUES (102, 1, 100, "post 2", "post333", 0, "2023-01-01 01:01:01", "2023-01-01 01:01:01");
 
 
 INSERT INTO Comment (id, member_pk, post_pk, parent_pk, content, level, create_date, update_date, is_removed, is_secret) VALUES (100, 100, 100, null, "100, LEVEL 0 - 1, null", 0, "2023-10-01 10:10:10", "2023-10-01 10:10:10", 0, 0);
