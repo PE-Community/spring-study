@@ -46,7 +46,7 @@ public class PostApiController {
     /**
      * 게시글 등록
      */
-    @PostMapping(value = "/create", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     @ResponseStatus(HttpStatus.CREATED)
     public ApiResponse<?> register(@RequestPart(value = "post") @Valid PostRequestDto post, @RequestPart(value = "files", required = false) List<MultipartFile> files) throws IOException {
         Long postId = postService.resister(post);
@@ -59,7 +59,7 @@ public class PostApiController {
     /**
      * 게시글 수정
      */
-    @PatchMapping(value = "/{postId}/update", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    @PatchMapping(value = "/{postId}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     @ResponseStatus(HttpStatus.OK)
     public ApiResponse<?> update(@PathVariable Long postId, @RequestPart @Valid PostRequestDto post,
                                  @RequestPart(required = false) List<MultipartFile> files) throws IOException {
@@ -73,7 +73,7 @@ public class PostApiController {
     /**
      * 게시글 삭제
      */
-    @DeleteMapping("/{postId}/delete")
+    @DeleteMapping("/{postId}")
     @ResponseStatus(HttpStatus.OK)
     public ApiResponse<?> delete(@PathVariable Long postId) {
         fileService.delete(postId);

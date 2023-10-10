@@ -26,8 +26,16 @@ public enum ErrorCode {
     //post
     POST_NOT_EXIST("존재하지 않는 게시글입니다."),
 
+    //comment
+    COMMENT_NOT_EXIST("존재하지 않는 댓글입니다."),
+    PARENT_COMMENT_NOT_EXIST("존재하지 않는 부모 댓글입니다."),
+    COMMENT_NOT_SAME_POST("부모 댓글과 자식 댓글의 게시글이 일치하지 않습니다."),
+    COMMENT_LEVEL_EXCEED("댓글은 2레벨까지만 작성가능합니다."),
+    COMMENT_REMOVE_FAIL("댓글 삭제가 실패되었습니다."),
+
     // File
     FILE_NOT_EXIST("존재하지 않는 파일입니다."),
+
 
 
     // jwt token
