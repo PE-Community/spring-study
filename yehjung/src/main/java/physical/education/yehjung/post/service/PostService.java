@@ -70,5 +70,8 @@ public class PostService {
     public void deletePost(Long id) {
         postRepository.deleteById(id);
     }
+    public List<Post> findByTitleContaining(String title){
+        return postRepository.findByTitleContaining(String title);
+    }
 
 }

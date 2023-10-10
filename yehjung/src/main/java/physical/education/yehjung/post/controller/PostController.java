@@ -94,6 +94,17 @@ public class PostController {
         return "board/edit.html";
     }
 
+    @GetMapping("/post/search")
+    public String search(@RequestParam(value = "subject",required = false) String subject,
+                         @RequestParam(value = "title", required = false) String title, Model model){
+        System.out.println(title);
+        List<Post> searchPost = postService.findByTitleContaining(title);
+        System.out.println(searchPost.size());
+        model.addAttribute("postList",searchPost);
+        return "board/list.html";
+    }
+
+
     @PutMapping("/post/edit/{id}")
     public String update(Post post) {
         postService.savePost(post);
