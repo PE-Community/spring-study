@@ -1,6 +1,5 @@
 package pe.pecommunity.global.common.response;
 
-import java.util.HashMap;
 import java.util.Map;
 import pe.pecommunity.global.error.ErrorCode;
 
@@ -17,21 +16,27 @@ public class ResponseUtils {
         return success(data, null);
     }
 
-    public static <T>ApiResponse<T> success (T data, String message) {
-        return new ApiResponse(ResponseStatus.SUCCESS, data, message);
+    public static <T>ApiResponse success (T data, String message) {
+        return ApiResponse.builder()
+                .status(ResponseStatus.SUCCESS)
+                .data(data)
+                .message(message)
+                .build();
     }
 
     public static <T>ApiResponse<T> successAsJson (String key, T object, String message) {
-        Map<String, Object> data = new HashMap<>();
-        data.put(key, object);
-        return new ApiResponse(ResponseStatus.SUCCESS, data, message);
+        return success(Map.of(key, object), message);
     }
 
     /**
      * 실패 - 회원가입, 로그인
      */
-    public static <T>ApiResponse<T> failure (T data, String message) {
-        return new ApiResponse(ResponseStatus.FAILURE, data, message);
+    public static <T>ApiResponse failure (T data, String message) {
+        return ApiResponse.builder()
+                .status(ResponseStatus.FAILURE)
+                .data(data)
+                .message(message)
+                .build();
     }
 
     /**
@@ -41,7 +46,11 @@ public class ResponseUtils {
         return error(data, message.getMessage());
     }
 
-    public static <T>ApiResponse<T> error (T data, String message) {
-        return new ApiResponse(ResponseStatus.ERROR, data, message);
+    public static <T>ApiResponse error (T data, String message) {
+        return ApiResponse.builder()
+                .status(ResponseStatus.ERROR)
+                .data(data)
+                .message(message)
+                .build();
     }
 }

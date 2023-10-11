@@ -7,7 +7,7 @@ import pe.pecommunity.domain.comment.dao.CommentRepositoryCustom;
 import pe.pecommunity.domain.member.domain.Member;
 
 @Repository
-public interface MemberRepository extends JpaRepository<Member, Long>, CommentRepositoryCustom {
+public interface MemberRepository extends JpaRepository<Member, Long> {
     Optional<Member> findByMemberId(String memberId);
     Optional<Member> findByNickname(String nickname);
     Optional<Member> findByEmail(String email);
