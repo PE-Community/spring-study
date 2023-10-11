@@ -1,0 +1,43 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="fragments/header :: header">
+<body>
+
+<div class="container" >
+    <div th:replace="fragments/bodyHeader :: bodyHeader"/>
+
+    <div class="py-5 text-center">
+        <h2>홈 화면</h2> </div>
+
+    <div sec:authorize="isAuthenticated()">
+        <h4>Login User</h4>
+        <div class="text-muted">ID: <span sec:authentication="principal.member.memberId"></span></div>
+        <div class="text-muted">Nickname: <span sec:authentication="principal.member.nickname"></span></div>
+        <div class="text-muted">Email: <span sec:authentication="principal.member.email"></span></div>
+    </div>
+
+    <hr class="my-4">
+
+    <div class="row">
+        <div class="col">
+            <button class="w-100 btn btn-secondary btn-lg" type="button"
+                    th:onclick="|location.href='@{/board}'|">
+                게시판
+            </button>
+        </div>
+
+        <div class="col">
+            <form th:action="@{/members/logout}" method="post">
+                <button class="w-100 btn btn-dark btn-lg" type="submit">
+                    로그아웃
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <hr class="my-4">
+
+</div> <!-- /container -->
+</body>
+</html>
