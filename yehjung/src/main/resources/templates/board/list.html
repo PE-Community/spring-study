@@ -36,6 +36,17 @@
         </tr>
         </tbody>
     </table>
+    <form action="post/search" method="get">
+        <div>
+            <select name="subject">
+                <option value="all">전체</option>
+                <option value="title">제목</option>
+            </select>
+            <input type="text" name="title">
+            <input type="submit" value="검색">
+            <input type="button" value="추가" onClick="location.href='post/search'">
+        </div>
+    </form>
     <div class="row">
         <div class="col-auto mr-auto"></div>
         <div class="col-auto">
